@@ -1,0 +1,9 @@
+- name: Test Play
+  hosts: all
+  tasks:
+  - name: Ping my hosts
+    ansible.builtin.ping:
+
+  - name: Debug Print
+    ansible.builtin.debug:
+      msg: "{{ ansible_lsb.codename }}" 

@@ -1,0 +1,14 @@
+- name: Install Nginx and Certbot
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: add nginx repository to apt
+      ansible.builtin.apt_repository:
+        repo: ppa:nginx/stable
+        state: present
+
+    - name: install nginx and certbot
+      ansible.builtin.apt:
+        pkg:
+          - nginx

@@ -1,0 +1,31 @@
+- name: Add Users
+  hosts: all
+  become: true
+  vars:
+    users:
+      - username: vodka
+        password_hash: $6$D.cxqCtiOzKXcgIP$hPSVdCNChj4v33KqE8hipSXA1vP6WthEbqy30.jxtra7h7Voyz4HEZ0/aV6oeSGfJ5J43g3z8hyx.bm0fMn0h0
+      - username: beypazari
+        password_hash: $6$s2aZEY/Io0zccHs9$gQg5NqJL8lo1uHiPgObBVBCG/LM7gc2jToGz8/HC1VB/J.v1BDPUXrwBIqN8W92EqmpyeI6j9ZnIpMLQ6jMd4/
+      - username: ice
+        password_hash: $6$SwPFaaGb.9hbTs3L$fcfXJGIS4vF4txv3FABw0IxpLoaZwhU.qtwXWqxac7VMmmpSadaGgzbPOD7EZjARghdplC8ikAcqZRBURa0gu0
+      # - username: sucuk
+      #   password_hash: $6$94/1Vwlyqdj6wsb.$/aDFtmDwwAOjPpJrCFqbCKvrrYIcqeCZq6ccCeVSXj9/Tyy8eXft05N.Axr9VnRGnuPvnOkxN0h1VmV6lPIdF1
+
+  tasks:
+    - name: ping host
+      ansible.builtin.ping:
+
+    - name: ensure docker group exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: create users
+      loop: "{{ users }}"
+      ansible.builtin.user:
+        state: present
+        name: "{{ item.username }}"
+        password: "{{ item.password_hash }}"
+        groups: docker
+        append: yes
